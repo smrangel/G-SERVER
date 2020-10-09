@@ -1,18 +1,10 @@
-const uid = require('uid'); //rust
-const http = require('http');
-const path = require('path');
-const express = require('express');
-const app = express();
-const fin = require('./final_contenedor.js');
+import { WebSocket, WebSocketServer } from "https://deno.land/x/websocket@v0.0.5/mod.ts";
+import * as pkg from 'https://cdn.skypack.dev/pico-uid';
 
-app.set('port', process.env.PORT||3001);
-app.use(express.static(path.join(__dirname,'public')));    
 
-const WebSocket = require('ws');
-const gdCom = require('@gd-com/utils'); // var { GdBuffer } = require('@gd-com/utils')
-const wss = new WebSocket.Server({ port: 3080 });
-const buf = new Buffer.from([1,2,3,255]);
 
+
+const wss = new WebSocketServer(3080);
 
 var sockets = [];
 var actual=[];
@@ -20,16 +12,11 @@ var posicion = 4;
 var rotacion = 2;
 
 
-
 var send={};
 
-
-
-console.log("Servidor listo");
-app.listen(app.get('port'),() => {});
-
-wss.on('connection', ws => {
-	var	model={
+wss.on("connection", function (WebSocket) {
+	console.log("asfasf");
+var	model={
 	id:0,
 	apodo:0,
 	packete_act:'',
@@ -45,27 +32,18 @@ wss.on('connection', ws => {
 		},
 
 	};
-	//console.log(ws);
 	sockets.push(ws);
-	var id=uid(20).toString();
-	//var apodo=uid(4).toString();
-  var jugadores={}
-  var grupo={};
-  jugadores=model;
-  jugadores.id=id;
-  grupo.id=jugadores.id;
-  grupo.crear=jugadores.crear;
-  actual.push(grupo);//[{id:_2141,crear},{id:_2141,crear}]
-  
-  //console.log("////////////")
-  //console.log(JSON.stringify(jugadores));
-  //console.log(jugadores[_id]);
-  //let datos ={contador:1, contenido:''}
-	  ws.on("message",function incoming(message){
-	  	/*var recibido = Buffer.from(message)
-	  	var impr = gdCom.getVar(recibido);
-	  	console.log(impr.value);*/
-	  	// _id = toString(ws._socket._handle.fd);
+  	var uid = pkg.default(20);
+  	var jugadores={};
+  	var grupo={};
+  	jugadores=model;
+  	jugadores.id=id;
+  	grupo.id=jugadores.id;
+  	grupo.crear=jugadores.crear;
+  	actual.push(grupo);
+
+  ws.on("message", function (string) {
+    	// _id = toString(ws._socket._handle.fd);
 	  	var bufferOne = Buffer.from(message);
 	  	var json = JSON.stringify(bufferOne.toString());
 	  	var jt=bufferOne.toString();
@@ -121,7 +99,9 @@ wss.on('connection', ws => {
 				
 			}*/
 	  }
-	  });
-  }
- );   
- 
+  });
+});
+const a = 1;
+const b = 1243;
+const c = a + b;
+console.log(c);
